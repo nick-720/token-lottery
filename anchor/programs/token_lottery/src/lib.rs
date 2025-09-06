@@ -146,7 +146,18 @@ pub mod token_lottery {
         Ok(())
     }
 
-    
+    pub fn buy_ticket(ctx: Context<BuyTicket>) -> Result<()> {
+
+        let clock = Clock::get()?;
+        let ticket_name = NAME.to_owned() + ctx.accounts.token_lottery.total_tickets.to_string().as_str();
+
+        if clock.slot < ctx.accounts.token_lottery.start_time || 
+        clock.slot > ctx.accounts.token_lottery.end_time {
+            return Err(ErrorCode::LotteryNotOpen.into());
+        }
+
+        Ok(())
+    }
 
 }
 
@@ -222,6 +233,72 @@ pub struct InitializeLottery<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
+#[derive(Accounts)]
+pub struct BuyTicket<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"token_Lottery".as_ref()],
+        bump = token_lottery.bump,
+    )]
+    pub token_lottery: Account<'info, TokenLottery>,
+
+    #[account(
+        init,
+        payer = payer,
+        seeds = [token_lottery.total_tickets.to_le_bytes().as_ref()],
+        bump,
+        mint::decimals = 0,
+        mint::authority = collection_mint,
+        mint::freeze_authority = collection_mint,
+        mint::token_program = token_program,
+    )]
+    pub ticket_mint: InterfaceAccount<'info, Mint>,
+
+    #[account(
+        init,
+        payer = payer,
+        associated_token::mint = ticket_mint,
+        associated_token::authority = payer,
+        associated_token::token_program = token_program,
+    )]
+    pub destination: InterfaceAccount<'info, TokenAccount>,
+
+    #[account(
+        mut,
+        seeds = [b"metadata", token_metadata_program.key().as_ref(), ticket_mint.key().as_ref()],
+        bump,
+        seeds::program = token_metadata_program.key()
+    )]
+    /// CHECK: This account is checked by the metadata smart contract
+    pub ticket_metadata: UncheckedAccount<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"metadata", token_metadata_program.key().as_ref(), ticket_mint.key().as_ref(), b"edition"],
+        bump,
+        seeds::program = token_metadata_program.key(),
+    )]
+    /// CHECK: This account is checked by the metadata smart contract
+    pub ticket_master_edition: UncheckedAccount<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"collection_mint".as_ref()],
+        bump,
+    )]
+    pub collection_mint: InterfaceAccount<'info, Mint>,
+
+    pub token_metadata_program: Program<'info, Metadata>,
+    associated_token_program: Program<'info, AssociatedToken>,
+    pub token_program: Interface<'info, TokenInterface>,
+    pub system_program: Program<'info, System>,
+    pub rent: Sysvar<'info, Rent>,
+
+}
+
 
 #[account]
 #[derive(InitSpace)]
@@ -236,4 +313,10 @@ pub struct TokenLottery {
     pub ticket_price: u64,
     pub authority: Pubkey,
     pub randomness_account: Pubkey, 
+}
+
+#[error_code]
+pub enum ErrorCode {
+    #[msg("The lottery is not open")]
+    LotteryNotOpen,
 }
