@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/token_lottery.json`.
  */
 export type TokenLottery = {
-  "address": "85sFSpiGJVEJHEp3iffao1mHSqC5TxdjpX5EUQ5bXvbd",
+  "address": "2XS87w4junnufzHXsBMZGzdD3E6hLQDgJW2QzFS7jy13",
   "metadata": {
     "name": "tokenLottery",
     "version": "0.1.0",
@@ -45,7 +45,7 @@ export type TokenLottery = {
                   101,
                   110,
                   95,
-                  76,
+                  108,
                   111,
                   116,
                   116,
@@ -185,6 +185,84 @@ export type TokenLottery = {
               {
                 "kind": "account",
                 "path": "ticketMint"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  100,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "tokenMetadataProgram"
+            }
+          }
+        },
+        {
+          "name": "collectionMetadata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tokenMetadataProgram"
+              },
+              {
+                "kind": "account",
+                "path": "collectionMint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "tokenMetadataProgram"
+            }
+          }
+        },
+        {
+          "name": "collectionMasterEdition",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tokenMetadataProgram"
+              },
+              {
+                "kind": "account",
+                "path": "collectionMint"
               },
               {
                 "kind": "const",
@@ -519,6 +597,13 @@ export type TokenLottery = {
         61,
         218
       ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "lotteryNotOpen",
+      "msg": "The lottery is not open"
     }
   ],
   "types": [

@@ -1,5 +1,5 @@
 {
-  "address": "85sFSpiGJVEJHEp3iffao1mHSqC5TxdjpX5EUQ5bXvbd",
+  "address": "2XS87w4junnufzHXsBMZGzdD3E6hLQDgJW2QzFS7jy13",
   "metadata": {
     "name": "token_lottery",
     "version": "0.1.0",
@@ -39,7 +39,7 @@
                   101,
                   110,
                   95,
-                  76,
+                  108,
                   111,
                   116,
                   116,
@@ -179,6 +179,84 @@
               {
                 "kind": "account",
                 "path": "ticket_mint"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  100,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "collection_metadata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "collection_master_edition",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
               },
               {
                 "kind": "const",
@@ -513,6 +591,13 @@
         61,
         218
       ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "LotteryNotOpen",
+      "msg": "The lottery is not open"
     }
   ],
   "types": [

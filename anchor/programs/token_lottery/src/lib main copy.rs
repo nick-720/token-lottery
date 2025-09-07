@@ -29,7 +29,7 @@ use anchor_spl::metadata::{
     mpl_token_metadata::types::{Creator, CollectionDetails, DataV2}
 };
 
-declare_id!("85sFSpiGJVEJHEp3iffao1mHSqC5TxdjpX5EUQ5bXvbd");
+declare_id!("F3q1icFeEeJcV11jadU3DnFvmNPUqBxg2cpuSjxGMfGQ");
 
 #[constant]
 pub const NAME: &str = "Token Lottery Ticket #";
